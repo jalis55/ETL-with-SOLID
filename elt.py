@@ -1,12 +1,15 @@
 # 🧩 S — Single Responsibility Principle (SRP)
 
-class ETLProcessor:
-    def extract(self):
-        # Connect to S3, read CSV
-        pass
+class Extractor:
+    def extract(self, file_path):
+        print(f"Extracting data from {file_path}")
+        return [{"name": "Alice", "age": 30}, {"name": "Bob", "age": 25}]
+
+class Transformer:
     def transform(self, data):
-        # Clean, filter, enrich
-        pass
+        print("Transforming data")
+        return [d for d in data if d["age"] > 26]
+
+class Loader:
     def load(self, data):
-        # Insert into database
-        pass
+        print(f"Loading data: {data}")
