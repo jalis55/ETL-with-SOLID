@@ -1,9 +1,12 @@
-# 🧩 S — Single Responsibility Principle (SRP)
+# 🧭 O — Open/Closed Principle (OCP)
 
 class Extractor:
     def extract(self, file_path):
-        print(f"Extracting data from {file_path}")
-        return [{"name": "Alice", "age": 30}, {"name": "Bob", "age": 25}]
+        if file_path.endswith('.csv'):
+            return self._read_csv(file_path)
+        elif file_path.endswith('.xml'):
+            return self._read_xml(file_path)
+        # more elifs coming
 
 class Transformer:
     def transform(self, data):
