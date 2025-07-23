@@ -1,16 +1,20 @@
 # 🤝 L — Liskov Substitution Principle (LSP)
 
-class Extractor:
-    def extract(self, file_path):
-        raise NotImplementedError
+from abc import ABC, abstractmethod
 
-class CSVExtractor:
-    def extract(self, file_path):
+class Extractor(ABC):
+    @abstractmethod
+    def extract(self, file_path: str) -> dict:
+        pass
+
+class CSVExtractor(Extractor):
+    def extract(self, file_path: str) -> dict:
         with open(file_path, 'r') as f:
-            return f.read()
+            data = f.read()
+        return { 'data': data }
 
-class MockExtractor:
-    def extract(self, file_path):
+class MockExtractor(Extractor):
+    def extract(self, file_path: str) -> dict:
         return { 'data': 'test' }
 
 
@@ -33,14 +37,11 @@ class Loader:
     def load(self, data):
         print(f"Loading data: {data}")
 
-# Added coordination class to manage the ETL process
 class ETLProcessor:
-    def __init__(self, extractor, transformer, loader):
-        self.extractor = extractor
-        self.transformer = transformer
-        self.loader = loader
-
-    def run(self, extractor):
+    def __init__(self):
+        pass
+  
+    def run(self, extractor: Extractor):
         data = extractor.extract('data.csv')
         print("Extracted data:", data)
 
