@@ -37,48 +37,56 @@ class Loader:
     def load(self, data):
         print(f"Loading data: {data}")
 
-class ETLProcessor:
-    def __init__(self):
-        pass
-  
-    def run(self, extractor: Extractor):
-        data = extractor.extract('data.csv')
-        print("Extracted data:", data)
 
 
 etl = ETLProcessor()
 etl.run(MockExtractor())
 
 
-class ETLInterface:
+class Extractable:
     def extract(self): pass
-    def transform(self): pass
-    def load(self): pass
-    def notify(self): pass  # newly added
 
-class FileETLJob(ETLInterface):
+class Transformable:
+    def transform(self): pass
+
+class Loadable:
+    def load(self): pass
+
+class Notifiable:
+    def notify(self): pass
+
+class FileETLJob(Extractable, Transformable, Loadable):
     def extract(self):
         print("Extracting data from CSV")
-    
+
     def transform(self):
             print("Transforming CSV data")
 
     def load(self):
         print("Loading data into DB")
 
-    def notify(self):
-        pass  # not needed, but required
-
-class RealTimeETLJob(ETLInterface):
+class RealTimeETLJob(Extractable, Transformable, Notifiable):
     def extract(self):
         print("Extracting data from Kafka")
 
     def transform(self):
             print("Transforming real-time data")
 
-    def load(self):
-        pass  # not needed
-
     def notify(self):
         print("Notifying dashboard")
 
+
+
+class ETLProcessor:
+    def __init__(self):
+        pass
+  
+    def run(self, job):
+        job.extract()
+        job.transform()
+
+        if isinstance(job, Loadable):
+            job.load()
+
+        if isinstance(job, Notifiable):
+            job.notify()
