@@ -2,12 +2,23 @@
 
 class Extractor:
     def extract(self, file_path):
-        if file_path.endswith('.csv'):
-            return self._read_csv(file_path)
-        elif file_path.endswith('.xml'):
-            return self._read_xml(file_path)
-        # more elifs coming
+        raise NotImplementedError
 
+class CSVExtractor(Extractor):
+    def extract(self, file_path):
+        # parse CSV
+        pass
+
+class XMLExtractor(Extractor):
+    def extract(self, file_path):
+        # parse XML
+        pass
+
+# Usage
+extractors = [CSVExtractor(), XMLExtractor()]
+for extractor in extractors:
+    if extractor.can_handle(file_path):
+        data = extractor.extract(file_path)
 class Transformer:
     def transform(self, data):
         print("Transforming data")
