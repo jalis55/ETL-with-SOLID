@@ -1,13 +1,18 @@
-# 🧭 O — Open/Closed Principle (OCP)
+# 🤝 L — Liskov Substitution Principle (LSP)
 
 class Extractor:
     def extract(self, file_path):
         raise NotImplementedError
 
-class CSVExtractor(Extractor):
+class CSVExtractor:
     def extract(self, file_path):
-        # parse CSV
-        pass
+        with open(file_path, 'r') as f:
+            return f.read()
+
+class MockExtractor:
+    def extract(self, file_path):
+        return { 'data': 'test' }
+
 
 class XMLExtractor(Extractor):
     def extract(self, file_path):
@@ -35,7 +40,10 @@ class ETLProcessor:
         self.transformer = transformer
         self.loader = loader
 
-    def run(self, file_path):
-        data = self.extractor.extract(file_path)
-        transformed = self.transformer.transform(data)
-        self.loader.load(transformed)
+    def run(self, extractor):
+        data = extractor.extract('data.csv')
+        print("Extracted data:", data)
+
+
+etl = ETLProcessor()
+etl.run(MockExtractor())
