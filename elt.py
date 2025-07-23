@@ -1,4 +1,4 @@
-# 🤝 L — Liskov Substitution Principle (LSP)
+#  I — Interface Segregation Principle (ISP)
 
 from abc import ABC, abstractmethod
 
@@ -48,3 +48,37 @@ class ETLProcessor:
 
 etl = ETLProcessor()
 etl.run(MockExtractor())
+
+
+class ETLInterface:
+    def extract(self): pass
+    def transform(self): pass
+    def load(self): pass
+    def notify(self): pass  # newly added
+
+class FileETLJob(ETLInterface):
+    def extract(self):
+        print("Extracting data from CSV")
+    
+    def transform(self):
+            print("Transforming CSV data")
+
+    def load(self):
+        print("Loading data into DB")
+
+    def notify(self):
+        pass  # not needed, but required
+
+class RealTimeETLJob(ETLInterface):
+    def extract(self):
+        print("Extracting data from Kafka")
+
+    def transform(self):
+            print("Transforming real-time data")
+
+    def load(self):
+        pass  # not needed
+
+    def notify(self):
+        print("Notifying dashboard")
+
